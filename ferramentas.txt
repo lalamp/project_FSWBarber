@@ -1,0 +1,8 @@
+prisma
+neondb
+typescript
+tailwind
+netx.js
+node.js
+react
+figma
