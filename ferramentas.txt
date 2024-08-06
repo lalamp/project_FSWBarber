@@ -2,6 +2,7 @@ prisma
 neondb
 typescript
 tailwind
+shadcn
 netx.js
 node.js
 react
