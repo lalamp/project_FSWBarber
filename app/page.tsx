@@ -8,16 +8,23 @@ import { Avatar, AvatarImage } from "./_components/ui/avatar"
 import Image from "next/image"
 import { db } from "./_lib/prisma"
 import BarbershopItem from "./_components/barbershop-item"
+import { quickSearchOptions } from "./_constants/search"
 
 const Home = async () => {
   // Banco de Dados
   const barbershops = await db.barbershop.findMany({})
+  const popularBarbershops = await db.barbershop.findMany({
+    orderBy: {
+      name: "desc",
+    },
+  })
 
   return (
     <div>
       {/* Header */}
       <Header />
 
+      {/* Main */}
       <div className="p-5">
         {/* Mensagem Inicial */}
         <h2 className="text-xl font-bold">Olá, Full Stack Week</h2>
@@ -26,9 +33,24 @@ const Home = async () => {
         {/* Busca */}
         <div className="mt-6 flex items-center gap-2">
           <Input placeholder="Faça sua busca..." />
-          <Button size="icon">
+          <Button size="icon" className="w-[60px]">
             <SearchIcon />
           </Button>
+        </div>
+
+        {/* Busca Rápida */}
+        <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
+          {quickSearchOptions.map((option) => (
+            <Button className="gap-2" variant="secondary" key={option.title}>
+              <Image
+                alt={option.title}
+                src={option.imageUrl}
+                width={16}
+                height={16}
+              />
+              <p>{option.title}</p>
+            </Button>
+          ))}
         </div>
 
         {/* Banner */}
@@ -47,7 +69,7 @@ const Home = async () => {
         </h2>
         <Card>
           <CardContent className="flex justify-between p-0">
-            <div className="flex flex-col gap-2 py-5 pl-5">
+            <div className="flex flex-col gap-2 px-5 py-5">
               <Badge className="w-fit">Confirmado</Badge>
               <h3 className="font-semibold">Corte de Cabelo</h3>
               <div className="flex items-center gap-2">
@@ -58,7 +80,7 @@ const Home = async () => {
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-center border-l-2 border-solid px-5">
+            <div className="mr-7 flex flex-col items-center justify-center border-l-2 border-solid p-5 pl-12">
               <p className="text-sm">Agosto</p>
               <p className="text-2xl">5</p>
               <p className="text-sm">20:00</p>
@@ -66,7 +88,7 @@ const Home = async () => {
           </CardContent>
         </Card>
 
-        {/* Barbearias */}
+        {/* Barbearias Recomendadas */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Recomendados
         </h2>
@@ -75,7 +97,26 @@ const Home = async () => {
             <BarbershopItem key={barbershop.id} barbershop={barbershop} />
           ))}
         </div>
+
+        {/* Barbearias Populares */}
+        <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
+          Populares
+        </h2>
+        <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+          {popularBarbershops.map((barbershop) => (
+            <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+          ))}
+        </div>
       </div>
+
+      {/* Footer */}
+      <footer>
+        <Card>
+          <CardContent className="px-5 py-4 text-center">
+            <p className="text-sm text-gray-400"> © Copyright FSW Barber </p>
+          </CardContent>
+        </Card>
+      </footer>
     </div>
   )
 }
