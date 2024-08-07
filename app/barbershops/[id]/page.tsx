@@ -1,3 +1,4 @@
+import PhoneItem from "@/app/_components/phone-item"
 import ServiceItem from "@/app/_components/service-item"
 import { Button } from "@/app/_components/ui/button"
 import { db } from "@/app/_lib/prisma"
@@ -79,6 +80,16 @@ const BarbershopPage = async ({ params }: BarbershopPageProps) => {
         <div className="space-y-3">
           {barbershop.services.map((service) => (
             <ServiceItem key={service.id} service={service} />
+          ))}
+        </div>
+      </div>
+
+      {/* Contatos */}
+      <div className="border-b border-solid p-5">
+        <h1 className="mb-3 text-sm font-bold text-gray-400">Contatos</h1>
+        <div className="space-y-3">
+          {barbershop.phones.map((phone) => (
+            <PhoneItem key={phone} phone={phone} />
           ))}
         </div>
       </div>
