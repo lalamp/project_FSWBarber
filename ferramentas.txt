@@ -3,7 +3,9 @@ neondb
 typescript
 tailwind
 shadcn
-netx.js
+next.js
+nextauth.js
 node.js
 react
+react hook form
 figma
