@@ -1,10 +1,17 @@
 import Image from "next/image"
-import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./sheet"
-import { CalendarIcon, HomeIcon, LogOutIcon } from "lucide-react"
-import { Avatar, AvatarImage } from "./avatar"
+import { SheetClose, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet"
+import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon } from "lucide-react"
 import Link from "next/link"
 import { quickSearchOptions } from "@/app/_constants/search"
-import { Button } from "./button"
+import { Button } from "./ui/button"
+import { DialogTrigger } from "@radix-ui/react-dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog"
 
 const SidebarSheet = () => {
   return (
@@ -15,7 +22,37 @@ const SidebarSheet = () => {
       </SheetHeader>
 
       {/* Login */}
-      <div className="flex items-center gap-3 border-b border-solid py-5">
+      <div className="flex items-center justify-between gap-3 border-b border-solid py-5">
+        <h2 className="font-bold">Olá, faça seu login</h2>
+        {/* Caixa de Login */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button size="icon">
+              <LogInIcon />
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Faça login na plataforma</DialogTitle>
+              <DialogDescription>
+                Conecte-se usando sua conta do Google
+              </DialogDescription>
+            </DialogHeader>
+
+            <Button variant="outline" className="gap-1 font-bold">
+              <Image
+                alt="Fazer login com Google"
+                src="/google.svg"
+                width={18}
+                height={18}
+              />
+              Google
+            </Button>
+          </DialogContent>
+        </Dialog>
+
+        {/* 
         <Avatar>
           <AvatarImage src="https://media.istockphoto.com/id/1915382108/pt/foto/smiling-friendly-confident-millennial-caucasian-lady-manager-teacher-in-formal-wear-with.webp?b=1&s=170667a&w=0&k=20&c=Bgs0ivlQI9W_MBEGniNHyc4Q1K7BMFhLo-5EVBGhccc=" />
         </Avatar>
@@ -23,6 +60,7 @@ const SidebarSheet = () => {
           <p className="font-bold">Ana Bela</p>
           <p className="text-xs">anabela@gmail.com</p>
         </div>
+        */}
       </div>
 
       {/* Início e Agendamentos */}

@@ -2,7 +2,7 @@ import Image from "next/image"
 import { Card, CardContent } from "./ui/card"
 import { Button } from "./ui/button"
 import { Sheet, SheetTrigger } from "./ui/sheet"
-import SidebarSheet from "./ui/sidebar-sheet"
+import SidebarSheet from "./sidebar-sheet"
 import { MenuIcon } from "lucide-react"
 
 const Header = () => {
