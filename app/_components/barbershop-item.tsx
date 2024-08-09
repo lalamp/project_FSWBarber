@@ -13,9 +13,9 @@ interface BarberShopItemProps {
 const BarbershopItem = ({ barbershop }: BarberShopItemProps) => {
   return (
     <Card className="min-w-[159px] rounded-2xl">
-      <CardContent className="flex flex-col items-center p-0">
+      <CardContent className="p-0">
         {/* Imagem */}
-        <div className="relative h-[159px] w-[159px]">
+        <div className="relative h-[159px] w-full">
           <Image
             alt={barbershop.name}
             fill
@@ -30,7 +30,7 @@ const BarbershopItem = ({ barbershop }: BarberShopItemProps) => {
         </div>
 
         {/* Texto */}
-        <div className="p-2">
+        <div className="w-full p-2">
           <h3 className="truncate font-semibold">{barbershop.name}</h3>
           <p className="truncate text-sm text-gray-400">{barbershop.address}</p>
           <Button variant="secondary" className="mt-3 w-full" asChild>
