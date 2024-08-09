@@ -1,14 +1,13 @@
-import { SearchIcon } from "lucide-react"
 import Header from "./_components/header"
 import { Button } from "./_components/ui/button"
 import { Card, CardContent } from "./_components/ui/card"
-import { Input } from "./_components/ui/input"
 import { Badge } from "./_components/ui/badge"
 import { Avatar, AvatarImage } from "./_components/ui/avatar"
 import Image from "next/image"
 import { db } from "./_lib/prisma"
 import BarbershopItem from "./_components/barbershop-item"
 import { quickSearchOptions } from "./_constants/search"
+import Search from "./_components/search"
 
 const Home = async () => {
   // Banco de Dados
@@ -31,11 +30,8 @@ const Home = async () => {
         <p>Segunda-Feira, 5 de agosto</p>
 
         {/* Busca */}
-        <div className="mt-6 flex items-center gap-2">
-          <Input placeholder="Faça sua busca..." />
-          <Button size="icon" className="w-[60px]">
-            <SearchIcon />
-          </Button>
+        <div className="mt-6">
+          <Search />
         </div>
 
         {/* Busca Rápida */}
