@@ -6,6 +6,7 @@ import { toast } from "sonner"
 interface PhoneItemProp {
   phone: string
 }
+
 const PhoneItem = ({ phone }: PhoneItemProp) => {
   const handleCopyPhoneClick = (phone: string) => {
     navigator.clipboard.writeText(phone)

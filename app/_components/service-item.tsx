@@ -15,7 +15,10 @@ import { Calendar } from "./ui/calendar"
 import { ptBR } from "date-fns/locale"
 import { useState } from "react"
 import { Button } from "./ui/button"
-import { format } from "date-fns"
+import { format, set } from "date-fns"
+import { useSession } from "next-auth/react"
+import { toast } from "sonner"
+import { createBooking } from "../_actions/create-booking"
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -57,6 +60,29 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
   )
   const handleTimeSelect = (time: string | undefined) => {
     setSelectedTime(time)
+  }
+
+  const { data } = useSession()
+  const handleCreateBooking = async () => {
+    try {
+      if (!selectedDay || !selectedTime) return
+      const hour = Number(selectedTime.split(":")[0])
+      const minute = Number(selectedTime.split(":")[1])
+      const newDate = set(selectedDay, {
+        minutes: minute,
+        hours: hour,
+      })
+
+      await createBooking({
+        serviceId: service.id,
+        userId: (data?.user as any).id,
+        date: newDate,
+      })
+      toast.success("Reserva criada com sucesso!")
+    } catch (error) {
+      console.error(error)
+      toast.error("Erro ao criar reserva.")
+    }
   }
 
   return (
@@ -182,7 +208,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                           <p className="text-sm">{selectedTime}</p>
                         </div>
 
-                        {/* horário */}
+                        {/* barbearia */}
                         <div className="flex items-center justify-between">
                           <h2 className="text-sm font-bold text-gray-400">
                             Barbearia
@@ -195,13 +221,16 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 )}
 
                 {/* Botão de Confirmar */}
-                {selectedTime && selectedDay && (
-                  <SheetFooter className="py-5">
-                    <SheetClose asChild>
-                      <Button type="submit">Confirmar</Button>
-                    </SheetClose>
-                  </SheetFooter>
-                )}
+                <SheetFooter className="py-5">
+                  <SheetClose asChild>
+                    <Button
+                      onClick={handleCreateBooking}
+                      disabled={!selectedDay || !selectedTime}
+                    >
+                      Confirmar
+                    </Button>
+                  </SheetClose>
+                </SheetFooter>
               </SheetContent>
             </Sheet>
           </div>
