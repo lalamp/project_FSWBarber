@@ -1,23 +1,45 @@
 import Header from "./_components/header"
 import { Button } from "./_components/ui/button"
-import { Card, CardContent } from "./_components/ui/card"
-import { Badge } from "./_components/ui/badge"
-import { Avatar, AvatarImage } from "./_components/ui/avatar"
 import Image from "next/image"
 import { db } from "./_lib/prisma"
 import BarbershopItem from "./_components/barbershop-item"
 import { quickSearchOptions } from "./_constants/search"
 import Search from "./_components/search"
 import Link from "next/link"
+import BookingItem from "./_components/booking-item"
+import { getServerSession } from "next-auth/next"
+import { authOptions } from "./_lib/auth"
 
 const Home = async () => {
   // Banco de Dados
+  const session = await getServerSession(authOptions)
+
   const barbershops = await db.barbershop.findMany({})
   const popularBarbershops = await db.barbershop.findMany({
     orderBy: {
       name: "desc",
     },
   })
+  const confirmedBookings = session?.user
+    ? await db.booking.findMany({
+        where: {
+          userId: (session.user as any).id,
+          date: {
+            gte: new Date(),
+          },
+        },
+        include: {
+          service: {
+            include: {
+              barbershop: true,
+            },
+          },
+        },
+        orderBy: {
+          date: "asc",
+        },
+      })
+    : []
 
   return (
     <div>
@@ -71,26 +93,11 @@ const Home = async () => {
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
           Agendamentos
         </h2>
-        <Card>
-          <CardContent className="flex justify-between p-0">
-            <div className="flex flex-col gap-2 px-5 py-5">
-              <Badge className="w-fit">Confirmado</Badge>
-              <h3 className="font-semibold">Corte de Cabelo</h3>
-              <div className="flex items-center gap-2">
-                <Avatar className="h-6 w-6">
-                  <AvatarImage src="https://utfs.io/f/c97a2dc9-cf62-468b-a851-bfd2bdde775f-16p.png" />
-                </Avatar>
-                <p className="text-sm">Barbearia FSW</p>
-              </div>
-            </div>
-
-            <div className="mr-7 flex flex-col items-center justify-center border-l-2 border-solid p-5 pl-12">
-              <p className="text-sm">Agosto</p>
-              <p className="text-2xl">5</p>
-              <p className="text-sm">20:00</p>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          {confirmedBookings.map((booking) => (
+            <BookingItem key={booking.id} booking={booking} />
+          ))}
+        </div>
 
         {/* Barbearias Recomendadas */}
         <h2 className="mb-3 mt-6 text-xs font-bold uppercase text-gray-400">
