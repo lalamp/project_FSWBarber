@@ -28,6 +28,7 @@ import {
 } from "./ui/dialog"
 import { deleteBooking } from "../_actions/delete-booking"
 import { toast } from "sonner"
+import { useState } from "react"
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -39,11 +40,13 @@ const BookingItem = ({ booking }: BookingItemProps) => {
   const {
     service: { barbershop },
   } = booking
+
   const isConfirmed = isFuture(booking.date)
 
   const handleCancelBooking = async () => {
     try {
-      deleteBooking(booking.id)
+      await deleteBooking(booking.id)
+      setIsSheetOpen(false)
       toast.success("Reserva cancelada com sucesso!")
     } catch (error) {
       console.error(error)
@@ -51,9 +54,14 @@ const BookingItem = ({ booking }: BookingItemProps) => {
     }
   }
 
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+  const handleSheetOpenChange = (isOpen: boolean) => {
+    setIsSheetOpen(isOpen)
+  }
+
   return (
     <>
-      <Sheet>
+      <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
         <SheetTrigger className="w-full">
           <Card className="min-w-[90%]">
             <CardContent className="flex justify-between p-0">
@@ -90,7 +98,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
           </Card>
         </SheetTrigger>
 
-        <SheetContent className="w-[90%]">
+        <SheetContent className="w-[85%]">
           <SheetHeader>Informações da Reserva</SheetHeader>
 
           {/* Mapa e Infos da Barbearia */}
@@ -199,13 +207,15 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                           Cancelar
                         </Button>
                       </DialogClose>
-                      <Button
-                        className="w-full"
-                        variant="destructive"
-                        onClick={handleCancelBooking}
-                      >
-                        Confirmar
-                      </Button>
+                      <DialogClose asChild>
+                        <Button
+                          className="w-full"
+                          variant="destructive"
+                          onClick={handleCancelBooking}
+                        >
+                          Confirmar
+                        </Button>
+                      </DialogClose>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
