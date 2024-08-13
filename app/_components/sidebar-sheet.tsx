@@ -28,7 +28,7 @@ const SidebarSheet = () => {
           //Login realizado
           <div className="flex items-center gap-2">
             <Avatar>
-              <AvatarImage src={data.user.image} />
+              <AvatarImage src={data?.user?.image ?? ""} />
             </Avatar>
             <div>
               <p className="font-bold">{data.user.name}</p>
