@@ -9,6 +9,8 @@ import Link from "next/link"
 import BookingItem from "./_components/booking-item"
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "./_lib/auth"
+import { format } from "date-fns"
+import { ptBR } from "date-fns/locale"
 
 const Home = async () => {
   // Banco de Dados
@@ -49,8 +51,18 @@ const Home = async () => {
       {/* Main */}
       <div className="p-5">
         {/* Mensagem Inicial */}
-        <h2 className="text-xl font-bold">Olá, Full Stack Week</h2>
-        <p>Segunda-Feira, 5 de agosto</p>
+        <h2 className="text-xl font-bold">
+          Olá, {session?.user ? session.user.name?.split(" ")[0] : "bem vindo"}
+        </h2>
+        <p>
+          <span className="capitalize">
+            {format(new Date(), "EEEE, dd ", { locale: ptBR })}
+          </span>
+          de
+          <span className="capitalize">
+            {format(new Date(), " MMMM", { locale: ptBR })}
+          </span>
+        </p>
 
         {/* Busca */}
         <div className="mt-6">
