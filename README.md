@@ -4,7 +4,7 @@ Projeto de um aplicativo para agendamentos de serviços em barbearias, realizado
 
 Tecnologias utilizadas:
 + Typescript
-+ React
++ React.js
 + Next.js
 + Node.js
 + PostgreSQL
@@ -12,5 +12,5 @@ Tecnologias utilizadas:
 + NeonDB
 + Tailwind
 + Shadcn
-+ Vercel
+
   
